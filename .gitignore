@@ -1,0 +1,5 @@
+.env
+.langgraph_api
+/open_deep_research.egg-info/
+__pycache__/
+*.py[cod]

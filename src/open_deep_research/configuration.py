@@ -38,9 +38,11 @@ class Configuration:
     number_of_queries: int = 2 # Number of search queries to generate per iteration
     max_search_depth: int = 2 # Maximum number of reflection + search iterations
     planner_provider: PlannerProvider = PlannerProvider.OPENAI  # Defaults to OpenAI as provider
-    planner_model: str = "o3-mini" # Defaults to OpenAI o3-mini as planner model
-    writer_provider: WriterProvider = WriterProvider.ANTHROPIC # Defaults to Anthropic as provider
-    writer_model: str = "claude-3-5-sonnet-latest" # Defaults to Anthropic as provider
+    planner_model: str = "gpt-4o-mini" # Defaults to OpenAI o3-mini as planner model
+    # writer_provider: WriterProvider = WriterProvider.ANTHROPIC # Defaults to Anthropic as provider
+    writer_provider: WriterProvider = WriterProvider.OPENAI # Defaults to Anthropic as provider
+    # writer_model: str = "claude-3-5-sonnet-latest" # Defaults to Anthropic as provider
+    writer_model: str = "gpt-4o-mini" # Defaults to Anthropic as provider
     search_api: SearchAPI = SearchAPI.TAVILY # Default to TAVILY
 
     @classmethod
