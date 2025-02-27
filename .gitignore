@@ -3,3 +3,4 @@
 /open_deep_research.egg-info/
 __pycache__/
 *.py[cod]
+.repomix-output.txt
