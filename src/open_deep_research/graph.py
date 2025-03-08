@@ -413,8 +413,51 @@ def compile_final_report(state: ReportState):
     for section in sections:
         section.content = completed_sections[section.name]
 
-    # Compile final report
-    all_sections = "\n\n".join([s.content for s in sections])
+    # Define the desired section order
+    # Introduction should be first, Conclusion should be last
+    ordered_sections = []
+    introduction_section = None
+    conclusion_section = None
+    other_sections = []
+
+    # Categorize sections
+    for section in sections:
+        if section.name.lower() == "introduction":
+            introduction_section = section
+        elif any(conclusion_term in section.name.lower() for conclusion_term in ["conclusion", "summary"]):
+            conclusion_section = section
+        else:
+            other_sections.append(section)
+
+    # Build the ordered list: Introduction first, then other sections, Conclusion last
+    if introduction_section:
+        ordered_sections.append(introduction_section)
+    ordered_sections.extend(other_sections)
+    if conclusion_section:
+        ordered_sections.append(conclusion_section)
+
+    # Compile final report with the correct order
+    all_sections_content = []
+    
+    # Add introduction content (which includes the report title with # heading)
+    if introduction_section:
+        all_sections_content.append(introduction_section.content)
+    
+    # Add other sections content
+    for section in other_sections:
+        all_sections_content.append(section.content)
+    
+    # Add conclusion content, but remove any # heading if present
+    if conclusion_section:
+        conclusion_content = conclusion_section.content
+        # Remove any line starting with # (but keep ## headings)
+        conclusion_lines = conclusion_content.split('\n')
+        filtered_conclusion_lines = [line for line in conclusion_lines if not line.strip().startswith('# ')]
+        conclusion_content = '\n'.join(filtered_conclusion_lines)
+        all_sections_content.append(conclusion_content)
+    
+    # Join all sections with double newlines
+    all_sections = "\n\n".join(all_sections_content)
 
     return {"final_report": all_sections}
 

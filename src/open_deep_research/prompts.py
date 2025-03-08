@@ -208,7 +208,7 @@ For Introduction:
 - No sources section needed
 
 For Conclusion/Summary:
-- Use ## for section title (Markdown format)
+- Use ## for section title (Markdown format) ONLY - DO NOT include the report title with # heading
 - 100-150 word limit
 - For comparative reports:
     * Must include a focused comparison table using Markdown table syntax
@@ -231,8 +231,8 @@ For Conclusion/Summary:
 </Task>
 
 <Quality Checks>
-- For introduction: 50-100 word limit, # for report title, no structural elements, no sources section
-- For conclusion: 100-150 word limit, ## for section title, only ONE structural element at most, no sources section
+- For introduction: 50-100 word limit, # for report title, no structural elements, no sources section, don't use the title name "Conclusion"
+- For conclusion: 100-150 word limit, ## followed by exact section name, no # report title, only ONE structural element at most, no sources section
 - Markdown format
 - Do not include word count or any preamble in your response
 </Quality Checks>"""
