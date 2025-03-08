@@ -269,20 +269,31 @@ def initiate_final_section_writing(state: ReportState):
     ]
 
 def compile_final_report(state: ReportState):
-    """ Compile the final report """    
-
-    # Get sections
+    """ Compile the final report in a Kindle book format """
     sections = state["sections"]
     completed_sections = {s.name: s.content for s in state["completed_sections"]}
-
-    # Update sections with completed content while maintaining original order
+    
+    # 各章の内容を更新
     for section in sections:
-        section.content = completed_sections[section.name]
+        section.content = completed_sections.get(section.name, "[内容未記入]")
+    
+    # カバーページ（タイトル、著者情報）
+    title = state["topic"]
+    author = "AI Writer"  # 必要に応じて環境変数や設定から取得
+    cover = f"# {title}\n\n著者: {author}\n\n"
 
-    # Compile final report
-    all_sections = "\n\n".join([s.content for s in sections])
+    # 目次の生成
+    toc_lines = [f"Chapter {i}: {section.name}" for i, section in enumerate(sections, 1)]
+    toc = "## 目次\n" + "\n".join(toc_lines) + "\n\n"
 
-    return {"final_report": all_sections}
+    # 各章の生成（Markdown形式）
+    chapters = "\n\n".join(
+        [f"## Chapter {i}: {section.name}\n\n{section.content}" for i, section in enumerate(sections, 1)]
+    )
+
+    # 最終レポートの組み立て
+    final_report = cover + toc + chapters
+    return {"final_report": final_report}
 
 # Report section sub-graph -- 
 

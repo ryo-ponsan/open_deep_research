@@ -6,17 +6,27 @@ from typing import Any, Optional
 from langchain_core.runnables import RunnableConfig
 from dataclasses import dataclass
 
-DEFAULT_REPORT_STRUCTURE = """Use this structure to create a report on the user-provided topic:
+DEFAULT_REPORT_STRUCTURE = """\
+カバー
+- タイトル
+- 著者情報
 
-1. Introduction (no research needed)
-   - Brief overview of the topic area
+目次
+- 各章のタイトル一覧
 
-2. Main Body Sections:
-   - Each section should focus on a sub-topic of the user-provided topic
-   
-3. Conclusion
-   - Aim for 1 structural element (either a list of table) that distills the main body sections 
-   - Provide a concise summary of the report"""
+序章
+- 読者に向けたイントロダクションと本書の目的
+
+各章
+- 各章は、具体的なトピックに基づく詳細な説明と事例を含む
+  - 各章内に「背景」「本論」「まとめ」を含む
+
+結論
+- 全体のまとめと今後の展望
+
+あとがき
+- 著者からのメッセージ
+"""
 
 class SearchAPI(Enum):
     PERPLEXITY = "perplexity"
@@ -36,13 +46,15 @@ class WriterProvider(Enum):
 class Configuration:
     """The configurable fields for the chatbot."""
     report_structure: str = DEFAULT_REPORT_STRUCTURE # Defaults to the default report structure
-    number_of_queries: int = 2 # Number of search queries to generate per iteration
-    max_search_depth: int = 2 # Maximum number of reflection + search iterations
+    # number_of_queries: int = 2 # Number of search queries to generate per iteration
+    # max_search_depth: int = 2 # Maximum number of reflection + search iterations
+    number_of_queries: int = 1 # Number of search queries to generate per iteration
+    max_search_depth: int = 1 # Maximum number of reflection + search iterations
     planner_provider: PlannerProvider = PlannerProvider.OPENAI  # Defaults to OpenAI as provider
     planner_model: str = "gpt-4o-mini" # Defaults to OpenAI o3-mini as planner model
     # writer_provider: WriterProvider = WriterProvider.ANTHROPIC # Defaults to Anthropic as provider
-    writer_provider: WriterProvider = WriterProvider.OPENAI # Defaults to Anthropic as provider
     # writer_model: str = "claude-3-5-sonnet-latest" # Defaults to Anthropic as provider
+    writer_provider: WriterProvider = WriterProvider.OPENAI # Defaults to Anthropic as provider
     writer_model: str = "gpt-4o-mini" # Defaults to Anthropic as provider
     search_api: SearchAPI = SearchAPI.TAVILY # Default to TAVILY
 

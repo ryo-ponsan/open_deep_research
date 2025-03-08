@@ -1,136 +1,109 @@
 # Prompt to generate search queries to help with planning the report
-report_planner_query_writer_instructions="""You are an expert technical writer, helping to plan a report. 
+report_planner_query_writer_instructions="""あなたは、読者が興味を持つKindle本形式のレポートを作成するための企画を支援する専門ライターです。
 
-<Report topic>
+<レポートトピック>
 {topic}
-</Report topic>
+</レポートトピック>
 
-<Report organization>
+<レポート構成>
 {report_organization}
-</Report organization>
+</レポート構成>
 
 <Task>
-Your goal is to generate {number_of_queries} search queries that will help gather comprehensive information for planning the report sections. 
-
-The queries should:
-
-1. Be related to the topic of the report
-2. Help satisfy the requirements specified in the report organization
-
-Make the queries specific enough to find high-quality, relevant sources while covering the breadth needed for the report structure.
+あなたの目標は、本書の各章で読者にストーリー性や背景情報を提供できるように、{number_of_queries}個の具体的かつ魅力的な検索クエリを生成することです。
+クエリは、トピックに関連し、読者が理解しやすい事例や背景情報を引き出すのに役立つものにしてください。
 </Task>
 """
 
 # Prompt to generate the report plan
-report_planner_instructions="""I want a plan for a report. 
+report_planner_instructions="""本レポートはKindle本形式として、読者にわかりやすく、ストーリーテリングの要素を取り入れた内容にしてください。
 
 <Task>
-Generate a list of sections for the report.
+以下の条件を満たす各章（セクション）のリストを生成してください。
 
-Each section should have the fields:
+各章は以下のフィールドを持つこと：
+- Name：章タイトル
+- Description：章で取り上げる主要トピックや背景、具体例を含む概要
+- Research：ウェブ検索による追加情報が必要かどうか
+- Content：現時点では空欄とし、後で内容を埋める
 
-- Name - Name for this section of the report.
-- Description - Brief overview of the main topics covered in this section.
-- Research - Whether to perform web research for this section of the report.
-- Content - The content of the section, which you will leave blank for now.
-
-For example, introduction and conclusion will not require research because they will distill information from other parts of the report.
+※ 序章やあとがき、結論は、他の章の内容をもとに執筆するため、Research不要としてください。
 </Task>
 
-<Topic>
-The topic of the report is:
+<レポートトピック>
 {topic}
-</Topic>
+</レポートトピック>
 
-<Report organization>
-The report should follow this organization: 
+<レポート構成>
+本書は以下の構成で進めてください：
 {report_organization}
-</Report organization>
+</レポート構成>
 
 <Context>
-Here is context to use to plan the sections of the report: 
+以下の情報を参考に各章の企画を立ててください：
 {context}
 </Context>
 
 <Feedback>
-Here is feedback on the report structure from review (if any):
+ここに、企画に対するフィードバックがあれば記載してください：
 {feedback}
 </Feedback>
 """
 
 # Query writer instructions
-query_writer_instructions="""You are an expert technical writer crafting targeted web search queries that will gather comprehensive information for writing a technical report section.
+query_writer_instructions="""あなたは、読者がより深く理解できるよう、背景や具体例を引き出すための検索クエリを作成する専門ライターです。
 
-<Report topic>
+<レポートトピック>
 {topic}
-</Report topic>
+</レポートトピック>
 
-<Section topic>
+<章トピック>
 {section_topic}
-</Section topic>
+</章トピック>
 
 <Task>
-Your goal is to generate {number_of_queries} search queries that will help gather comprehensive information above the section topic. 
-
-The queries should:
-
-1. Be related to the topic 
-2. Examine different aspects of the topic
-
-Make the queries specific enough to find high-quality, relevant sources.
+本章の内容を豊かにするため、{number_of_queries}個の具体的な検索クエリを生成してください。
+クエリは、読者が背景や事例を理解できるような情報を得るためのものである必要があります。
 </Task>
 """
 
 # Section writer instructions
-section_writer_instructions = """You are an expert technical writer crafting one section of a technical report.
+section_writer_instructions = """あなたは、読者を引き込むための魅力的な章（セクション）を執筆する専門ライターです。
 
-<Report topic>
+<レポートトピック>
 {topic}
-</Report topic>
+</レポートトピック>
 
-<Section topic>
+<章トピック>
 {section_topic}
-</Section topic>
+</章トピック>
 
-<Existing section content (if populated)>
+<既存の章内容（既にある場合）>
 {section_content}
-</Existing section content>
+</既存の章内容>
 
-<Source material>
+<情報源>
 {context}
-</Source material>
+</情報源>
 
-<Guidelines for writing>
-1. If the existing section content is not populated, write a new section from scratch.
-2. If the existing section content is populated, write a new section that synthesizes the existing section content with the new information.
-</Guidelines for writing>
-
+<Guidelines>
+1. もし既存の内容が無い場合は、ゼロから新たに執筆してください。
+2. 読者に親しみやすいナラティブな文章で、具体的な事例を含めながら執筆してください。
+3. 文章はシンプルで明快に、各段落は2～3文にまとめてください。
+4. Markdown の見出しは「##」を用いて章タイトルを記載してください。
+5. 必要に応じて、適度なリストまたは表を使用してください（ただし、１種類のみ）。
+6. 最後に「### Sources」として、情報源をリストアップしてください。
 <Length and style>
-- Strict 150-200 word limit
-- No marketing language
-- Technical focus
-- Write in simple, clear language
-- Start with your most important insight in **bold**
-- Use short paragraphs (2-3 sentences max)
-- Use ## for section title (Markdown format)
-- Only use ONE structural element IF it helps clarify your point:
-  * Either a focused table comparing 2-3 key items (using Markdown table syntax)
-  * Or a short list (3-5 items) using proper Markdown list syntax:
-    - Use `*` or `-` for unordered lists
-    - Use `1.` for ordered lists
-    - Ensure proper indentation and spacing
-- End with ### Sources that references the below source material formatted as:
-  * List each source with title, date, and URL
-  * Format: `- Title : URL`
+- 150～200語の厳密な長さ（見出しやソース部分は除く）
+- 先頭は**太字**で最も重要な洞察を示す
 </Length and style>
 
 <Quality checks>
-- Exactly 150-200 words (excluding title and sources)
-- Careful use of only ONE structural element (table or list) and only if it helps clarify your point
-- One specific example / case study
-- Starts with bold insight
-- No preamble prior to creating the section content
-- Sources cited at end
+- 150～200語に収める（見出し、ソース除く）
+- 使用する構造要素はリストまたは表のいずれか１つのみ
+- 具体例を１つ以上盛り込むこと
+- 文章は余計な前置きなしで開始
+- 最後にソースを記載すること（例：`- タイトル : URL`）
 </Quality checks>
 """
 
@@ -165,58 +138,36 @@ If the section fails any criteria, generate specific follow-up search queries to
 </format>
 """
 
-final_section_writer_instructions="""You are an expert technical writer crafting a section that synthesizes information from the rest of the report.
+final_section_writer_instructions="""あなたは、本全体の情報を統合し、序章または結論を執筆する専門ライターです。
 
-<Report topic>
+<レポートトピック>
 {topic}
-</Report topic>
+</レポートトピック>
 
-<Section topic> 
+<章トピック>
 {section_topic}
-</Section topic>
+</章トピック>
 
-<Available report content>
+<利用可能な章内容>
 {context}
-</Available report content>
+</利用可能な章内容>
 
 <Task>
-1. Section-Specific Approach:
+【序章の場合】  
+- カバーと目次を兼ねた導入部分として、# を使用し50～100語で執筆してください。  
+- 読者に対するレポートの動機と概要を、ストーリー性をもって紹介してください。  
+- 構造要素（リスト・表）は使用しないでください。
 
-For Introduction:
-- Use # for report title (Markdown format)
-- 50-100 word limit
-- Write in simple and clear language
-- Focus on the core motivation for the report in 1-2 paragraphs
-- Use a clear narrative arc to introduce the report
-- Include NO structural elements (no lists or tables)
-- No sources section needed
+【結論の場合】  
+- 章タイトルには「##」を使用し、100～150語で執筆してください。  
+- レポート全体のまとめと、今後の展望を示すとともに、必要なら１つのリストまたは表を使用してください。  
+- 最後に具体的な次のステップを記述してください。
 
-For Conclusion/Summary:
-- Use ## for section title (Markdown format)
-- 100-150 word limit
-- For comparative reports:
-    * Must include a focused comparison table using Markdown table syntax
-    * Table should distill insights from the report
-    * Keep table entries clear and concise
-- For non-comparative reports: 
-    * Only use ONE structural element IF it helps distill the points made in the report:
-    * Either a focused table comparing items present in the report (using Markdown table syntax)
-    * Or a short list using proper Markdown list syntax:
-      - Use `*` or `-` for unordered lists
-      - Use `1.` for ordered lists
-      - Ensure proper indentation and spacing
-- End with specific next steps or implications
-- No sources section needed
-
-3. Writing Approach:
-- Use concrete details over general statements
-- Make every word count
-- Focus on your single most important point
+3. 執筆にあたっては、具体的な詳細に基づいた明快な文章を作成してください。
 </Task>
 
 <Quality Checks>
-- For introduction: 50-100 word limit, # for report title, no structural elements, no sources section
-- For conclusion: 100-150 word limit, ## for section title, only ONE structural element at most, no sources section
-- Markdown format
-- Do not include word count or any preamble in your response
+- 序章の場合：50～100語、#見出し、構造要素なし、ソース不要  
+- 結論の場合：100～150語、##見出し、構造要素は１つまで、ソース不要  
+- Markdown形式で記載すること（余計な前置きなし）
 </Quality Checks>"""
