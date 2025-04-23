@@ -4,3 +4,4 @@
 __pycache__/
 *.py[cod]
 .repomix-output.txt
+report.md
